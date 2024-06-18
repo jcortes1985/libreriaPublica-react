@@ -8,13 +8,14 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
-function EditaLibro({id, esNuevo}) {
+function EditaLibro({esNuevo, id, idClasificacion, clasificacion, idGenero, genero, titulo, trama, hojas}) {
     /* const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true); */
   
     const [validated, setValidated] = useState(false);
+    //Hooks para el llenado del nuevo o el actualizadao del registro
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -24,6 +25,7 @@ function EditaLibro({id, esNuevo}) {
     }
 
     setValidated(true);
+
   };
 
 
@@ -34,7 +36,7 @@ function EditaLibro({id, esNuevo}) {
         
         <Form.Group as={Col} md="4" controlId="validationCustom01">
           <Form.Label>Clasificación</Form.Label>
-          <Form.Select required placeholder="Clasificacion" aria-label="Default select example">
+          <Form.Select required placeholder="Clasificacion" aria-label="Default select example" defaultValue={idClasificacion} >
             <option></option>
             <option value="1">A</option>
             <option value="2">B</option>
@@ -47,7 +49,7 @@ function EditaLibro({id, esNuevo}) {
 
           <Form.Group as={Col} md="8" controlId="validationCustom11">
           <Form.Label>Genero</Form.Label>
-          <Form.Select required placeholder="Genero" aria-label="Default select example">
+          <Form.Select required placeholder="Genero" aria-label="Default select example" defaultValue={idGenero}>
             <option></option>
             <option value="1">Ficción</option>
             <option value="2">Adultos</option>
@@ -64,7 +66,7 @@ function EditaLibro({id, esNuevo}) {
             required
             type="text"
             placeholder="Titulo"
-            defaultValue=""
+            defaultValue={titulo}
           />
           <Form.Control.Feedback type="invalid">
           Campo Obligatorio.
@@ -75,7 +77,8 @@ function EditaLibro({id, esNuevo}) {
           <Form.Control
             type="text"
             placeholder="Hojas"
-            defaultValue="0"
+            defaultValue={hojas}
+            
           />
         </Form.Group>
 
@@ -85,7 +88,8 @@ function EditaLibro({id, esNuevo}) {
             required
             type="text"
             placeholder="Trama"
-            defaultValue=""
+            defaultValue={trama}
+            
           />
           <Form.Control.Feedback type="invalid">
           Campo Obligatorio.
