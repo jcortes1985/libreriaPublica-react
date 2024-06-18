@@ -1,0 +1,23 @@
+.login{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.divInput{
+    justify-content: center;
+}
+
+.errores{
+    color: brown;
+   }
+
+.data{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+    right: 20px;
+   }
