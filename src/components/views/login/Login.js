@@ -1,51 +1,61 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Login.css'
+import Form from 'react-bootstrap/Form';
+import FormGroup from 'react-bootstrap/FormGroup'
+import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
+
 
 function Login({ setUser }) {
+
       //Creamos estados para el acceso al sistema principal
-    const [usuario, setUsuario] = useState("")
-    const [contrasena, setContrasena] = useState("")
-    const [error, SetError] = useState(false)
+      const [usuario, setUsuario] = useState("")
+      const [contrasena, setContrasena] = useState("")
+      const [error, SetError] = useState(false)
+  
+      //Metodo ejecutado al presionar el Botón Ingresar
+      const handleSubmit = (e)=> {
+          e.preventDefault()
+  
+          //traemos valores de BD
+  
+          //Validamos que el usuario y/o contraseña no esten vacios
+          if(usuario == "" || contrasena == "")
+              {
+                  SetError(true)
+                  return 
+              }  
+              SetError(false)
+              //En caso de que la autenticación sea correcta seteamos el usuario con a la variable User 
+              setUser([usuario])
+      
+            }
 
-    //Metodo ejecutado al presionar el Botón Ingresar
-    const handleSubmit = (e)=> {
-        e.preventDefault()
-        //Validamos que el usuario y/o contraseña no esten vacios
-        if(usuario == "" || contrasena == "")
-            {
-                SetError(true)
-                return 
-            }  
-            SetError(false)
-            //En caso de que la autenticación sea correcta seteamos el usuario con a la variable User 
-            setUser([usuario])
-    }
 
 
-    return  (
-        <div className='login'>
-        <section>
-            <h2>Acceso al Sistema</h2>
-            <img src="https://2.bp.blogspot.com/-8xWgNPyQ1-8/UY2NdOg6psI/AAAAAAAAABA/SSlXTrN1RDA/s350/1bf5913a0ba79bfbd8d646421884841bba5e3c4e.jpg"  width="100%" alt=""></img>
-            {error && <p className='errores'>Usuario y Contraseña obligatorios.</p>}
-            <form className='data' onSubmit={handleSubmit}>
-                <div>
-                <label htmlFor="">Usuario:</label>
-                <input type="text" value={usuario} onChange={e => setUsuario(e.target.value)}/>
-                </div>
-                <div>
-                <label htmlFor="">Contraseña: </label>
-                <input type="password" value={contrasena} onChange={e => setContrasena(e.target.value)} />
-                </div>
-                <button>Ingresar</button>
-               
-            </form>
-            <a href="url">Entrar como invitado...</a>
-        </section>
-        </div>
-
+  return (
+    <div>
+        <><div>
+            <h1>Acceso al sistema</h1>
+        </div><Form onSubmit={handleSubmit}>
+        {error && <p className='errores'>Usuario y Contraseña obligatorios.</p>}
+                <Form.Group className="mb-3" controlId="formGroupEmail">
+                    <Form.Label>Correo Electronico</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" value={usuario} onChange={e => setUsuario(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formGroupPassword">
+                    <Form.Label>Contraseña</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={contrasena} onChange={e => setContrasena(e.target.value)}/>
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Ingresar
+                </Button>
+                <Nav.Link href="#home">Ingresar como invitado...</Nav.Link>
+            </Form></>
+    </div>
   )
 }
 
 export default Login
+

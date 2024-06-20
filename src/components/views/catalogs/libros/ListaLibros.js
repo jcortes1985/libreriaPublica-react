@@ -1,12 +1,14 @@
 import React, { Fragment, useEffect, useState } from "react"
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'
 
 //imports para el PopUp de los mensajes
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import AddEditLibro from "./AddEditLibro";
 import { BsAlignEnd, BsDisplay } from "react-icons/bs";
+
 
 function CatLibros() {
 
@@ -54,11 +56,30 @@ const [hojas, setHojas] = useState(0);
       }
   ]
   
-      const [lista, setLista] = useState([])
-      useEffect(()=>{
-          setLista(datos);
+      const [lista, setLista] = useState(null)
+      /* useEffect(()=>{
+        getData();
       },[]
-      )
+      ) */
+
+      React.useEffect(() => {
+        axios.get('http://localhost:5180/api/Libros').then((response) => {
+            setLista(response.data);
+        });
+      }, []);
+
+//servicio para el llamado de lista de libros
+    const getData =()=>{
+        alert('1');
+        axios.get('http://localhost:5180/api/Libros')
+        .then((response)=> {
+            setLista(response.data)
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    }
+
   //eventos para la alta u baja de elementos
   const handleEdit = (idLibro, idClasificacion, clasificacion, idGenero, genero, titulo, trama, hojas)=>{
     setID(idLibro); setidClasificacion(idClasificacion); setClasificacion(clasificacion); setidGenero(idGenero); setGenero(genero); setTitulo(titulo); setTrama(trama); setHojas(hojas);
@@ -105,17 +126,17 @@ const [hojas, setHojas] = useState(0);
                           lista.map((item, index) => {
                               return (
                                   <tr key={index}>
-                                      <td>{item.id}</td>
-                                      <td>{item.idClasificacion}</td>
-                                      <td>{item.clasificacion}</td>
+                                      <td>{item.idLibro}</td>
                                       <td>{item.idGenero}</td>
-                                      <td>{item.genero}</td>
+                                      <td>{item.idGenero}</td>
+                                      <td>{item.idClasificacion}</td>
+                                      <td>{item.idClasificacion}</td>
                                       <td>{item.titulo}</td>
                                       <td>{item.trama}</td>
-                                      <td>{item.numeroHojas}</td>
+                                      <td>{item.hojas}</td>
                                       <td colSpan={2}>
-                                          <button className="btn btn-primary" onClick={() => handleEdit(item.id, item.idClasificacion, item.clasificacion, item.idGenero, item.genero, item.titulo, item.trama, item.numeroHojas)}>Editar</button>
-                                          <button className="btn btn-danger" onClick={() => handleDelete(item.id, item.titulo)}>Eliminar</button>
+                                          <button className="btn btn-primary" onClick={() => handleEdit(item.idLibro, item.idClasificacion, item.idClasificacion, item.idGenero, item.idGenero, item.titulo, item.trama, item.hojas)}>Editar</button>
+                                          <button className="btn btn-danger" onClick={() => handleDelete(item.idLibro, item.titulo)}>Eliminar</button>
                                       </td>
 
                                   </tr>
