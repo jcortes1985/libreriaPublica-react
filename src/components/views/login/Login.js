@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
 import axios from 'axios';
 import { useState } from "react";
-import NavBar from '../menu/NavBar';
 import Modal from 'react-bootstrap/Modal';
 
 
@@ -14,7 +13,6 @@ const Login = ({ setUser }) => {
       const [email, setEmail] = useState("")
       const [password, setPassword ] = useState("")
       const [error, SetError] = useState(false)
-      const [lista, setLista] = useState(null)
       const [ErrMsg, setErrMsg] = useState(false)
       const handleCloseMsg = () => setmsgLogin(false);
       const handleShowLoginIncorrecto = () => setmsgLogin(true);
@@ -26,9 +24,7 @@ const Login = ({ setUser }) => {
        //traemos valores de BD mediante el servivio
       const HandleSubmit = async (e) => {
         e.preventDefault();
-        //alert(email)
-        //alert(password)
-       
+    
         if(email == "" || password == "")
           {
               SetError(true)
@@ -36,34 +32,26 @@ const Login = ({ setUser }) => {
           }  
           SetError(false)
         try {
-              
+          //Servicio para el incio de sesion
           axios.post('http://localhost:5180/api/Users?email=' + email + '&password=' + password, {
-            email: email,
-            password: password
-          })
-          .then((response) => {
-            //console.log(response);
-            console.log(response.data);
+          }).then((response) => {
             if (response.data.length > 0) {
               setUser([response.data[0].idUser])
             } else {
               handleMsg();
             }
           });
-          
         } catch (err) {
-
-          if (!err?.response) {
-            setErrMsg("No Server Response");
-          } else if (err.response?.status === 400) {
-            setErrMsg("Missing Username or Password");
-          } else if (err.response?.status === 401) {
-            setErrMsg("Unauthorized");
-          } else {
-            setErrMsg("Login Failed");
-          }
-          //errRef.current.focus();
-    };     
+            if (!err?.response) {
+              setErrMsg("No Server Response");
+            } else if (err.response?.status === 400) {
+              setErrMsg("Missing Username or Password");
+            } else if (err.response?.status === 401) {
+              setErrMsg("Unauthorized");
+            } else {
+              setErrMsg("Login Failed");
+            }
+          };     
 }
 
   return (
