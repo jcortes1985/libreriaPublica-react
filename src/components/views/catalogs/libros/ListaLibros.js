@@ -2,17 +2,15 @@ import React, { Fragment, useEffect, useState } from "react"
 import Table from 'react-bootstrap/Table'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
-
 //imports para el PopUp de los mensajes
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import AddEditLibro from "./AddEditLibro";
-import { BsAlignEnd, BsDisplay } from "react-icons/bs";
 
 
 function CatLibros() {
 
-//Hooks para el PopUp de los mensajes
+//Hooks para el mantenimiento del catalogo de libros
 const [show, setShow] = useState(false);
 const [eliminar, setEliminar] = useState(false);
 const handleClose = () => setShow(false);
@@ -29,63 +27,37 @@ const [titulo, setTitulo] = useState();
 const [trama, setTrama] = useState();
 const [hojas, setHojas] = useState(0);
 
-
     {
-
-  const datos = 
-  [
-      {
-          id: 1,
-          idClasificacion: 2,
-          clasificacion: 'B',
-          idGenero: 1,
-          genero: 'Ficción',
-          titulo: 'Harry Potter',
-          trama: 'Un Mago que desde muy chico no se habia dado cuenta el gran poder que tenia ...',
-          numeroHojas: 290
-      },
-      {
-          id: 2,
-          idClasificacion: 1,
-          clasificacion: 'A',
-          idGenero: 3,
-          genero: 'Infantil',
-          titulo: 'El Principito',
-          trama: 'Este era un rey...',
-          numeroHojas: 150
-      }
-  ]
-  
+    
       const [lista, setLista] = useState(null)
-      /* useEffect(()=>{
+       useEffect(()=>{
         getData();
       },[]
-      ) */
+      )
 
-      React.useEffect(() => {
-        axios.get('http://localhost:5180/api/Libros').then((response) => {
-            setLista(response.data);
-        });
-      }, []);
-
-//servicio para el llamado de lista de libros
+    //servicio para el llamado de lista de libros
     const getData =()=>{
-        alert('1');
-        axios.get('http://localhost:5180/api/Libros')
-        .then((response)=> {
+        axios.get('http://localhost:5180/api/Libros').then((response)=> {
+            setLista(response.data)
+        }).catch((error)=>{
+            console.log(error)
+        })
+        }
+      //Servicio para el delete del Librop seleccionado
+      const deleteData =(id)=>{
+        axios.delete('http://localhost:5180/api/Libros/' + id).then((response)=> {
             setLista(response.data)
         })
         .catch((error)=>{
             console.log(error)
         })
-    }
+        }
 
-  //eventos para la alta u baja de elementos
-  const handleEdit = (idLibro, idClasificacion, clasificacion, idGenero, genero, titulo, trama, hojas)=>{
-    setID(idLibro); setidClasificacion(idClasificacion); setClasificacion(clasificacion); setidGenero(idGenero); setGenero(genero); setTitulo(titulo); setTrama(trama); setHojas(hojas);
+//Eventos del Formulario
+  //eventos para la alta o baja de elementos
+    const handleEdit = (idLibro, idClasificacion, clasificacion, idGenero, genero, titulo, trama, hojas)=>{
     setEsNuevo(false);
     handleShow();
-   
   }
 
   const handleDelete = (id, titulo)=>{
@@ -93,21 +65,30 @@ const [hojas, setHojas] = useState(0);
     setTitulo(titulo);
     handleShowDelete();
   }
+  
+  const handleConfirmaDelete = ()=>{
+    deleteData(id);
+    handleCloseEliminar();
+    getData();
+  }
 
   const handleNew = ()=>{
-    setID(0); setidClasificacion(0); setClasificacion(""); setidGenero(0); setGenero(""); setTitulo(""); setTrama(""); setHojas(0);
     setEsNuevo(true);
     handleShow();
   }
 
+const handleRegresar = () =>{
+    handleClose();
+    getData();
+}
 
   return (
     <><div>
+        
       </div><Fragment>
               <Table striped bordered hover>
                   <thead>
                       <tr>
-
                           <th>Id</th>
                           <th>id</th>
                           <th>Clasificacion</th>
@@ -135,7 +116,7 @@ const [hojas, setHojas] = useState(0);
                                       <td>{item.trama}</td>
                                       <td>{item.hojas}</td>
                                       <td colSpan={2}>
-                                          <button className="btn btn-primary" onClick={() => handleEdit(item.idLibro, item.idClasificacion, item.idClasificacion, item.idGenero, item.idGenero, item.titulo, item.trama, item.hojas)}>Editar</button>
+                                          <button className="btn btn-primary" onClick={() => handleEdit(setID(item.idLibro), setidClasificacion(item.idClasificacion), setidClasificacion(item.idClasificacion),setidGenero(item.idGenero), setidGenero(item.idGenero), setTitulo(item.titulo), setTrama(item.trama), setHojas(item.hojas))}>Editar</button>
                                           <button className="btn btn-danger" onClick={() => handleDelete(item.idLibro, item.titulo)}>Eliminar</button>
                                       </td>
 
@@ -155,8 +136,8 @@ const [hojas, setHojas] = useState(0);
                       <AddEditLibro esNuevo={esNuevo} id={id} idClasificacion={idClasificacion} clasificacion={clasificacion} idGenero={idGenero} genero={genero} titulo={titulo} trama={trama} hojas={hojas} />
                   </Modal.Body>
                   <Modal.Footer>
-                      <Button variant="secondary" onClick={handleClose}>
-                          Cerrar
+                      <Button variant="btn btn-success" onClick={handleRegresar}>
+                          Regresar...
                       </Button>
                   </Modal.Footer>
               </Modal>
@@ -170,15 +151,14 @@ const [hojas, setHojas] = useState(0);
                 <Button variant="secondary" onClick={handleCloseEliminar}>
                     Cancelar
                 </Button>
-                <Button variant="primary" onClick={handleDelete}>
+                <Button variant="primary" onClick={handleConfirmaDelete}>
                     Eliminar
                 </Button>
                 </Modal.Footer>
             </Modal>
           </Fragment></>
-
 );
+}
+}
 
-}
-}
 export default CatLibros

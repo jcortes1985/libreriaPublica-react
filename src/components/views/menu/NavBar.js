@@ -7,7 +7,7 @@ import './NavBar.css';
 import { IconContext } from 'react-icons';
 
 
-function NavBar({user, setUser}) {
+function NavBar() {
   
   const [usuario, setUsuario] = useState("")  
   const [sidebar, setSidebar] = useState(false);

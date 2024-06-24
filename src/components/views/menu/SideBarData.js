@@ -2,6 +2,7 @@ import React from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
+import CatLibros from '../catalogs/libros/ListaLibros';
 
 export const SideBarData = [
   {
@@ -12,7 +13,7 @@ export const SideBarData = [
   },
   {
     title: 'Catálogo de Libros',
-    path: '/ListaLibros',
+    path: '/ListaLibros',//'/ListaLibros',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   },
